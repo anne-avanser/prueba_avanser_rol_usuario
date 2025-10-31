@@ -1,0 +1,310 @@
+
+/* RESET Y BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", Arial, sans-serif;
+    background-color: #F5F5F5;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* HEADER FIJO  */
+header {
+    background-color: #39A900;
+    color: #FFFFFF;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0;
+    z-index: 100;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+header .banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header .logo {
+    height: 60px;
+}
+
+header h1 {
+    font-size: 22px;
+    letter-spacing: 0.5px;
+}
+
+/*  MAIN  */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 120px;
+    padding: 0 15px 100px 15px;
+}
+
+/*  FORMULARIO  */
+.form-container {
+    background-color: #FFFFFF;
+    padding: 35px 45px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 480px;
+}
+
+h2 {
+    color: #39A900;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.6em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+    font-size: 0.95em;
+}
+
+input,
+select {
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 6px;
+    outline: none;
+    font-size: 0.95em;
+    transition: border-color 0.3s;
+}
+
+input:focus,
+select:focus {
+    border-color: #39A900;
+}
+
+button {
+    background-color: #39A900;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+button:hover {
+    background-color: #2F8800;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* ERRORES  */
+.errores {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.errores ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+/*  ÉXITO (CHECK ANIMADO)  */
+.success-container {
+    background-color: #FFFFFF;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    max-width: 500px;
+    margin: 80px auto;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.success-container h2 {
+    color: #39A900;
+    margin-bottom: 10px;
+    font-size: 1.6em;
+}
+
+.success-container p {
+    color: #333;
+    font-size: 1.1em;
+}
+
+.btn-volver {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    background-color: #39A900;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-volver:hover {
+    background-color: #2F8800;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ANIMACIÓN DEL CHECK  */
+.checkmark {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px auto;
+}
+
+.circle {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 6px solid #39A900;
+    top: 0;
+    left: 0;
+    animation: circle-scale 0.5s ease-out forwards;
+}
+
+.stem {
+    position: absolute;
+    width: 6px;
+    height: 35px;
+    background-color: #39A900;
+    top: 25px;
+    left: 40px;
+    transform: rotate(45deg) scaleY(0);
+    transform-origin: top left;
+    animation: draw-stem 0.3s ease-out 0.5s forwards;
+}
+
+.kick {
+    position: absolute;
+    width: 6px;
+    height: 18px;
+    background-color: #39A900;
+    top: 47px;
+    left: 25px;
+    transform: rotate(-45deg) scaleY(0);
+    transform-origin: top left;
+    animation: draw-kick 0.3s ease-out 0.8s forwards;
+}
+
+@keyframes circle-scale {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes draw-stem {
+    0% {
+        transform: rotate(45deg) scaleY(0);
+    }
+
+    100% {
+        transform: rotate(45deg) scaleY(1);
+    }
+}
+
+@keyframes draw-kick {
+    0% {
+        transform: rotate(-45deg) scaleY(0);
+    }
+
+    100% {
+        transform: rotate(-45deg) scaleY(1);
+    }
+}
+
+/* ANIMACIONES GENERALES  */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* FOOTER FIJO  */
+footer {
+    background-color: #333333;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 12px 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 0.9em;
+    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* RESPONSIVE  */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 18px;
+    }
+
+    .form-container {
+        padding: 25px;
+    }
+
+    main {
+        margin-top: 100px;
+        padding: 0 10px 90px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    header .logo {
+        height: 50px;
+    }
+
+    header h1 {
+        font-size: 16px;
+    }
+
+    .form-container {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Rol - SENA</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <header>
+        <div class="banner">
+            <img src="data:image/png;base64,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" alt="Logo SENA" class="logo">
+            <h1>Gestión de Roles - Sistema SENA</h1>
+        </div>
+        <nav class="navbar">
+            <a href="/" class="nav-link">Registrar Usuario</a>
+            <a href="/roles/" class="nav-link active">Registrar Rol</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <h2>Registrar Nuevo Rol</h2>
+
+            {% if errores %}
+            <div class="errores">
+                <ul>
+                    {% for e in errores %}
+                    <li>{{ e }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if exito %}
+            <div class="success-container">
+                <h3> {{ exito }}</h3>
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <label for="nombre_rol">Nombre del Rol:</label>
+                <input type="text" id="nombre_rol" name="nombre_rol" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                    title="Solo se permiten letras" placeholder="Ej: Instructor" required>
+                <button type="submit" class="btn">Crear Rol</button>
+            </form>
+
+            <hr>
+
+            <h3>Roles Existentes</h3>
+            {% if roles %}
+            <ul class="lista-roles">
+                {% for rol in roles %}
+                <li> {{ rol.nombre_rol }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No hay roles registrados aún.</p>
+            {% endif %}
+
+            <div class="nav-buttons">
+                <a href="/" class="btn-volver">Volver al Registro de Usuario</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© {{ now|date:"Y" }} Servicio Nacional de Aprendizaje SENA - Todos los derechos reservados</p>
+    </footer>
+</body>
+
+</html>

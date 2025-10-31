@@ -1,0 +1,37 @@
+
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Reporte de Pruebas Automatizadas</title>
+<style>
+body { font-family: Arial; background-color: #f9f9f9; padding: 20px; }
+h1 { color: #39A900; }
+pre { background: #eee; padding: 15px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<h1>Reporte de Pruebas Automatizadas (Unittest)</h1>
+<p><strong>Fecha:</strong> 2025-10-30 16:58:17</p>
+<hr>
+<pre>test_documento_unico (test_registro_usuario.TestRegistroUsuario.test_documento_unico)
+Verifica que el documento sea único ... ok
+test_no_permitir_usuario_sin_rol (test_registro_usuario.TestRegistroUsuario.test_no_permitir_usuario_sin_rol)
+Verifica que no se puede crear un usuario sin rol ... ok
+test_registrar_usuario_correctamente (test_registro_usuario.TestRegistroUsuario.test_registrar_usuario_correctamente)
+Registrar un usuario con un rol existente ... ok
+test_crear_rol (test_roles.TestRol.test_crear_rol)
+Debe crear un rol correctamente ... ok
+test_eliminar_rol_elimina_usuarios (test_roles.TestRol.test_eliminar_rol_elimina_usuarios)
+Al eliminar un rol, también deben eliminarse los usuarios relacionados (CASCADE) ... ok
+test_no_permitir_rol_duplicado (test_roles.TestRol.test_no_permitir_rol_duplicado)
+No debe permitir roles con nombres duplicados ... ok
+test_relacion_usuario_rol (test_roles.TestRol.test_relacion_usuario_rol)
+Debe poder asociar un usuario a un rol existente ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 6.342s
+
+OK
+</pre>
+</body>
+</html>
