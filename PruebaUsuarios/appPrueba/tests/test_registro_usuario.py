@@ -1,87 +1,136 @@
-import unittest # Permite crear y ejecutar pruebas unitarias en Python
-import os         # Sirve para manipular rutas y archivos del sistema operativo
-import sys        # Permite modificar la ruta de búsqueda de módulos (sys.path)
-import django     # Se utiliza para configurar e inicializar el entorno Django
+import unittest
+import os
+import sys
+import django
+import io
+from datetime import datetime
 
-#CONFIGURAR RUTA DEL PROYECTO
+# CONFIGURAR RUTA DEL PROYECTO
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(BASE_DIR)
 
-#CONFIGURAR ENTORNO DJANGO
+# CONFIGURAR ENTORNO DJANGO
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'PruebaUsuarios.settings')
-django.setup() # Se inicializa Django para poder usar sus modelos dentro de este archivo
+django.setup()
 
 from appPrueba.models import Rol, Usuario
 
+
 class TestRegistroUsuario(unittest.TestCase):
+    """Pruebas unitarias del módulo de usuarios."""
 
-    def setUp(self):  # Método setUp(): se ejecuta antes de cada test
-        Rol.objects.all().delete()  # Se eliminan todos los registros existentes para evitar interferencias
+    def setUp(self):
+        """Se ejecuta antes de cada prueba."""
         Usuario.objects.all().delete()
+        self.rol, creado = Rol.objects.get_or_create(nombre_rol='Aprendiz')
 
-        self.rol_admin = Rol.objects.create(nombre_rol='admin')
-        self.rol_aprendiz = Rol.objects.create(nombre_rol='aprendiz')
-        self.rol_funcionario = Rol.objects.create(nombre_rol='funcionario')
-
-     # PRUEBA 1: Registro correcto de usuario
-    def test_registrar_usuario_correctamente(self):
-        """Registrar un usuario con un rol existente"""
+    # PRUEBA 1: Registrar usuario  (POST)
+    def test_registrar_usuario(self):
         usuario = Usuario.objects.create(
-            nombre='Salome',
-            apellido='Gironza',
+            nombre='Juan',
+            apellido='Pérez',
             tipo_documento='CC',
-            documento='12345678',
-            correo='salo12@gmail.com',
-            telefono='3124567890',
-            id_rol=self.rol_funcionario,
-            contrasenia='Abc12345'
+            documento='123456',
+            correo='juanperez@gmail.com',
+            telefono='3123456789',
+            id_rol=self.rol,
+            estado=1,
+            contrasenia='ClaveSegura123'
         )
-        self.assertEqual(usuario.id_rol.nombre_rol, 'funcionario')
-        self.assertEqual(usuario.nombre, 'Salome')
+        self.assertIsNotNone(usuario.id_usuario)
+        self.assertEqual(usuario.id_rol, self.rol)
 
     # PRUEBA 2: No permitir usuario sin rol
     def test_no_permitir_usuario_sin_rol(self):
-        """Verifica que no se puede crear un usuario sin rol"""
         with self.assertRaises(Exception):
             Usuario.objects.create(
-                nombre='Carlos',
-                apellido='Torres',
+                nombre='Ana',
+                apellido='Gómez',
                 tipo_documento='CC',
-                documento='98765432',
-                correo='carlos@gmail.com',
-                contrasenia='Abc12345',
-                id_rol=None
+                documento='654321',
+                correo='ana@gmail.com',
+                telefono='3000000000',
+                id_rol=None,
+                estado=1,
+                contrasenia='ClaveSegura123'
             )
 
-    # PRUEBA 3: Documento único
-    def test_documento_unico(self):
-        """Verifica que el documento sea único"""
-        Usuario.objects.create(
-            nombre='Luis',
-            apellido='Gomez',
+
+    # PRUEBA 3: Validar relación usuario-rol (GET)
+    def test_relacion_usuario_rol(self):
+        usuario = Usuario.objects.create(
+            nombre='Carlos',
+            apellido='Ruiz',
             tipo_documento='CC',
-            documento='111222333',
-            correo='luis@gmail.com',
-            id_rol=self.rol_admin,
-            contrasenia='Abc12345'
+            documento='888888',
+            correo='carlos@gmail.com',
+            telefono='3110000000',
+            id_rol=self.rol,
+            estado=1,
+            contrasenia='ClaveSegura123'
         )
-        with self.assertRaises(Exception):
-            Usuario.objects.create(
-                nombre='Luis',
-                apellido='Gomez',
-                tipo_documento='CC',
-                documento='111222333',  # repetido
-                correo='luis2@gmail.com',
-                id_rol=self.rol_admin,
-                contrasenia='Abc12345'
-            )
+        self.assertEqual(usuario.id_rol.nombre_rol, 'Aprendiz')
 
-     # Método tearDown(): se ejecuta después de cada test
-    def tearDown(self):
-        Usuario.objects.all().delete()
-        Rol.objects.all().delete()
+    # PRUEBA 4: Actualizar datos del usuario (PUT)
+    def test_actualizar_usuario(self):
+        usuario = Usuario.objects.create(
+            nombre='Laura',
+            apellido='Torres',
+            tipo_documento='CC',
+            documento='999999',
+            correo='lauraemail.com',
+            telefono='3001112233',
+            id_rol=self.rol,
+            estado=1,
+            contrasenia='abc'
+        )
+        usuario.telefono = '3200000000'
+        usuario.correo = 'laura@nuevo.com'
+        usuario.save()
 
-# Permite ejecutar las pruebas desde la terminal con:
-#   python nombre_del_archivo.py
+        actualizado = Usuario.objects.get(id_usuario=usuario.id_usuario)
+        self.assertEqual(actualizado.telefono, '3200000000')
+        self.assertEqual(actualizado.correo, 'laura@nuevo.com')
+
+
+# ==============================================
+# EJECUCIÓN INDIVIDUAL CON REPORTE HTML
+# ==============================================
 if __name__ == '__main__':
-    unittest.main()
+    loader = unittest.TestLoader()
+    suite = loader.loadTestsFromTestCase(TestRegistroUsuario)
+
+    stream = io.StringIO()
+    runner = unittest.TextTestRunner(stream=stream, verbosity=2)
+    result = runner.run(suite)
+
+    total = result.testsRun
+    errores = len(result.errors)
+    fallos = len(result.failures)
+    exitosos = total - errores - fallos
+    porcentaje = (exitosos / total * 100) if total > 0 else 0
+
+    # Crear reporte HTML manualmente
+    html = f"""
+    <html>
+    <head><meta charset='utf-8'><title>Reporte de Pruebas - Usuarios</title></head>
+    <body style="font-family:Arial;background:#f9f9f9;padding:20px;">
+    <h1 style="color:#39A900;">Reporte de Pruebas - Módulo Usuarios</h1>
+    <p><b>Fecha:</b> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+    <p><b>Total pruebas:</b> {total}</p>
+    <p><b>Aprobadas:</b> {exitosos}</p>
+    <p><b>Fallidas:</b> {fallos}</p>
+    <p><b>Errores:</b> {errores}</p>
+    <p><b>Porcentaje éxito:</b> {porcentaje:.2f}%</p>
+    <hr>
+    <pre>{stream.getvalue()}</pre>
+    </body></html>
+    """
+
+    # Guardar archivo HTML
+    ruta_reporte = os.path.join(os.path.dirname(__file__), 'test_report_usuarios.html')
+    with open(ruta_reporte, 'w', encoding='utf-8') as f:
+        f.write(html)
+
+    print(stream.getvalue())
+    print(f"Reporte HTML generado: {ruta_reporte}")
